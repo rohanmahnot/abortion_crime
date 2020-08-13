@@ -1,0 +1,31 @@
+---
+title: "abortion_crime"
+author: "Rohan Mahnot"
+date: "8/13/2020"
+output: html_document
+---
+
+```{r}
+setwd("~/OneDrive/My Drive/Data Incubator/abortion_crime")
+##Import csv
+crime <- read.csv("crime.csv")
+abortion <- read.csv("abortion.csv")
+names(abortion) <- c("Year", "Abortions")
+population <- read.csv("ny state pop.csv")
+
+#Crime total per year
+crime_agg <- aggregate(as.numeric(Index.Total) ~ Year, data = crime, FUN = sum)
+names(crime_agg) <- c("Year","Total_Crimes")
+
+#Merging
+
+merged <- merge(abortion,crime_agg,by = c("Year"),all=T)
+merged <- merge(merged,population,by=c("Year"),all=T)
+
+#Rates
+merged$Crime_Rate <- 100000*merged$Total_Crimes/merged$Population
+
+#Save
+write.csv(merged,"Merged_Data.csv",na="",row.names = F)
+```
+
