@@ -5,13 +5,18 @@ date: "8/13/2020"
 output: html_document
 ---
 
+```{r setup, include=FALSE, cache=FALSE}
+require("knitr")
+opts_knit$set(root.dir = "~/OneDrive/My Drive/Data Incubator/abortion_crime")
+```
+
+
 ```{r}
-setwd("~/OneDrive/My Drive/Data Incubator/abortion_crime")
 ##Import csv
-crime <- read.csv("crime.csv")
-abortion <- read.csv("abortion.csv")
+crime <- read.csv("data_input/crime.csv")
+abortion <- read.csv("data_input/abortion.csv")
 names(abortion) <- c("Year", "Abortions")
-population <- read.csv("ny state pop.csv")
+population <- read.csv("data_input/ny state pop.csv")
 
 #Crime total per year
 crime_agg <- aggregate(as.numeric(Index.Total) ~ Year, data = crime, FUN = sum)
@@ -26,6 +31,6 @@ merged <- merge(merged,population,by=c("Year"),all=T)
 merged$Crime_Rate <- 100000*merged$Total_Crimes/merged$Population
 
 #Save
-write.csv(merged,"Merged_Data.csv",na="",row.names = F)
+write.csv(merged,"data_output/Merged_Data.csv",na="",row.names = F)
 ```
 
